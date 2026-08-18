@@ -1,0 +1,44 @@
+/*/{Protheus.doc} validateQP1Qtde
+Valida a quantidade conforme o tipo de carta informado no SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param xValue, variant, Valor informado para o campo QP1_QTDE
+@param cField, character, Nome do campo em validacao
+@param aContextInfo, array, Tipo de carta informado na primeira posicao
+@return json, Resultado da validacao e mensagem para o usuario
+/*/
+Function validateQP1Qtde(xValue, cField, aContextInfo)
+    Local cCarta   := ""      as character
+    Local cMessage := STR0007 as character // STR0007 - "Nao foi possivel executar a validacao porque o contexto recebido e invalido." 
+    Local lValid   := .F.     as logical
+
+    If ValType(xValue) == "N" .And. ValType(cField) == "C" .And. ValType(aContextInfo) == "A" .And. Len(aContextInfo) >= 1 .And. ValType(aContextInfo[1]) == "C" .And. Upper(AllTrim(cField)) == "QP1_QTDE"
+        cCarta := Upper(AllTrim(aContextInfo[1]))
+
+        If cCarta == "HIS" .Or. cCarta == "XBR" .Or. cCarta == "XBS" .Or. cCarta == "XMR" .Or. cCarta == "IND"
+            lValid := xValue >= 2 .And. xValue <= 10
+
+            If !lValid
+                cMessage := STR0008 // STR0008 - "A quantidade deve estar entre 2 e 10 para o tipo de carta informado."
+            EndIf
+        ElseIf cCarta == "NP" .Or. cCarta == "C"
+            lValid := xValue > 0
+
+            If !lValid
+                cMessage := STR0009 // STR0009 - "A quantidade deve ser maior que zero para o tipo de carta informado."
+            EndIf
+        Else
+            lValid := xValue == 0
+
+            If !lValid
+                cMessage := STR0010 // STR0010 - "A quantidade deve ser zero para o tipo de carta informado."
+            EndIf
+        EndIf
+
+        If lValid
+            cMessage := ""
+        EndIf
+    EndIf
+
+Return buildValidationResult(lValid, cMessage)

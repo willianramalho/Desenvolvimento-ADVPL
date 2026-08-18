@@ -1,0 +1,25 @@
+/*/{Protheus.doc} validateQP2NaoCon
+Valida a nao conformidade informada no cadastro de ensaios do SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param xValue, variant, Valor informado para o campo QP2_NAOCON
+@param cField, character, Nome do campo em validacao
+@param aContextInfo, array, Informacoes adicionais do contexto SmartX
+@return json, Resultado da validacao e mensagem para o usuario
+/*/
+Function validateQP2NaoCon(xValue, cField, aContextInfo)
+    Local cMessage := STR0013 as character // STR0013 - "Nao foi possivel executar a validacao porque o contexto recebido e invalido."
+    Local lValid   := .F.     as logical
+
+    If ValType(xValue) == "C" .And. ValType(cField) == "C" .And. ValType(aContextInfo) == "A" .And. Upper(AllTrim(cField)) == "QP2_NAOCON"
+        lValid := ExistCpo("SAG", xValue)
+
+        If lValid
+            cMessage := ""
+        Else
+            cMessage := STR0014 // STR0014 - "A nao conformidade informada nao esta cadastrada."
+        EndIf
+    EndIf
+
+Return buildValidationResult(lValid, cMessage)

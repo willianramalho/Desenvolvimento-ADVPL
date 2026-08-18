@@ -1,0 +1,25 @@
+/*/{Protheus.doc} validateQP1Metodo
+Valida o metodo informado no SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param xValue, variant, Valor informado para o campo QP1_METODO
+@param cField, character, Nome do campo em validacao
+@param aContextInfo, array, Informacoes adicionais do contexto SmartX
+@return json, Resultado da validacao e mensagem para o usuario
+/*/
+Function validateQP1Metodo(xValue, cField, aContextInfo)
+    Local cMessage := STR0011 as character // STR0011 - "Nao foi possivel executar a validacao porque o contexto recebido e invalido." 
+    Local lValid   := .F.     as logical
+
+    If ValType(xValue) == "C" .And. ValType(cField) == "C" .And. ValType(aContextInfo) == "A" .And. Upper(AllTrim(cField)) == "QP1_METODO"
+        lValid := ExistCpo("QDH", xValue)
+
+        If lValid
+            cMessage := ""
+        Else
+            cMessage := STR0012 // STR0012 - "O metodo informado nao esta cadastrado."
+        EndIf
+    EndIf
+
+Return buildValidationResult(lValid, cMessage)

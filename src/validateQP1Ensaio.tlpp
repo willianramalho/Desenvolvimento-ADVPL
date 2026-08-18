@@ -1,0 +1,28 @@
+/*/{Protheus.doc} validateQP1Ensaio
+Valida o codigo do ensaio informado no SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param xValue, variant, Valor informado para o campo QP1_ENSAIO
+@param cField, character, Nome do campo em validacao
+@param aContextInfo, array, Informacoes adicionais do contexto SmartX
+@return json, Resultado da validacao e mensagem para o usuario
+/*/
+Function validateQP1Ensaio(xValue, cField, aContextInfo)
+    Local cMessage := STR0001 as character // STR0001 - "Nao foi possivel executar a validacao porque o contexto recebido e invalido."
+    Local lValid   := .F.     as logical
+
+    If ValType(xValue) == "C" .And. ValType(cField) == "C" .And. ValType(aContextInfo) == "A" .And. Upper(AllTrim(cField)) == "QP1_ENSAIO"
+        If Upper(AllTrim(xValue)) == "LAUDO"
+            cMessage := STR0002 // STR0002 - "O codigo de ensaio LAUDO e reservado e nao pode ser utilizado."
+        ElseIf !ExistChav("QP1", xValue)
+            cMessage := STR0003 // STR0003 - "O ensaio informado já está cadastrado."
+        ElseIf !FreeForUse("QP1", xValue)
+            cMessage := STR0004 // STR0004 - "O código de ensaio informado já esta em uso."
+        Else
+            lValid   := .T.
+            cMessage := ""
+        EndIf
+    EndIf
+
+Return buildValidationResult(lValid, cMessage)

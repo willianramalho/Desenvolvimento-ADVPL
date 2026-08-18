@@ -1,0 +1,25 @@
+/*/{Protheus.doc} validateQP1Carta
+Valida o tipo de carta informado no SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param xValue, variant, Valor informado para o campo QP1_CARTA
+@param cField, character, Nome do campo em validacao
+@param aContextInfo, array, Informacoes adicionais do contexto SmartX
+@return json, Resultado da validacao e mensagem para o usuario
+/*/
+Function validateQP1Carta(xValue, cField, aContextInfo)
+    Local cMessage := STR0005 as character // STR0005 - "Nao foi possivel executar a validacao porque o contexto recebido e invalido."
+    Local lValid   := .F.     as logical
+
+    If ValType(xValue) == "C" .And. ValType(cField) == "C" .And. ValType(aContextInfo) == "A" .And. Upper(AllTrim(cField)) == "QP1_CARTA"
+        lValid := !Empty(xValue) .And. ExistCpo("SX5", "Q4" + xValue)
+
+        If lValid
+            cMessage := ""
+        Else
+            cMessage := STR0006 // STR0006 - "Informe um tipo de carta valido cadastrado na tabela Q4."
+        EndIf
+    EndIf
+
+Return buildValidationResult(lValid, cMessage)

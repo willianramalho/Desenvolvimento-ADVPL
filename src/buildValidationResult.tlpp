@@ -1,0 +1,17 @@
+/*/{Protheus.doc} buildValidationResult
+Monta o contrato de retorno de uma validacao de campo SmartX.
+@type function
+@author willian.ramalho
+@since 23/07/2026
+@param lValid, logical, Indica se o valor informado e valido
+@param cMessage, character, Mensagem apresentada em caso de falha
+@return json, Contrato de retorno esperado pelo SmartX
+/*/
+Static Function buildValidationResult(lValid, cMessage)
+    Local jResult as json
+
+    jResult := JsonObject():new()
+    jResult["return"] := lValid
+    jResult["notValidMessage"] := cMessage
+
+Return jResult
