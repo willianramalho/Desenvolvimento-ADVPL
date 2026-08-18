@@ -1,0 +1,14 @@
+/*/{Protheus.doc} NonconformitiesInterface
+Interface do cadastro de Nao Conformidades.
+@type class
+@author willian.ramalho Equipe Qualidade Protheus //TODO
+@since 18/07/2026
+/*/
+@totvsFrameworkStructureInterface(description="Nao Conformidades")
+class NonconformitiesInterface
+    private data oInterface as object
+
+    public method new() as object
+    public method setInterface()
+    public method getContract() as json
+endclass

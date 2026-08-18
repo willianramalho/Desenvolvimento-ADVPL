@@ -1,0 +1,29 @@
+/*/{Protheus.doc} hasReferenceInBranch
+Consulta a referencia em uma filial especifica. QLTQueryManager():dbSeek
+ja aplica internamente o filtro "<ALIAS>_FILIAL = xFilial(cAlias)", entao
+ele so pode ser usado quando a filial pesquisada e a corrente -- informar
+um segundo filtro de filial produziria "FILIAL = X AND FILIAL = Y" e
+zeraria o resultado. Para as demais filiais da empresa (cenario de tabela
+exclusiva com SAG compartilhada) usa-se o mecanismo equivalente
+QLTQueryManager():executeQueryWithBind, com o mesmo bind parametrizado.
+@type method
+@author willian.ramalho
+@since 18/08/2026
+@param cAlias, character, Alias consultado (QE2/QP2/QE9/QP9/QEU/QPU)
+@param cBranch, character, Filial pesquisada
+@param cCode, character, Codigo da nao conformidade (AG_NAOCON)
+@return logical, Existe referencia no alias para a filial informada
+/*/
+method hasReferenceInBranch(cAlias as character, cBranch as character, cCode as character) as logical class NonconformitiesEvents
+
+    Local aFiltros := {}  as array
+    Local lFound   := .F. as logical
+
+    If cBranch == xFilial(cAlias)
+        AAdd(aFiltros, {" " + cAlias + "_NAOCON = ? ", {{cCode, "S"}}})
+        lFound := QLTQueryManager():dbSeek(cAlias, "", aFiltros)
+    Else
+        lFound := self:hasReferenceInOtherBranch(cAlias, cBranch, cCode)
+    EndIf
+
+return lFound

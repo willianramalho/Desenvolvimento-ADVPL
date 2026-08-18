@@ -1,0 +1,21 @@
+/*/{Protheus.doc} validateSAGNonconformitySmartX
+Valida a chave da nao conformidade conforme o X3_VALID legado de
+AG_NAOCON.
+@type function
+@author willian.ramalho
+@since 18/08/2026
+@param xValue, variant, Valor do campo
+@param cField, character, Campo em validacao
+@param aContextInfo, array, Contexto resolvido pelo cliente
+@return json, Resultado da validacao
+/*/
+Function validateSAGNonconformitySmartX(xValue, cField, aContextInfo)
+
+    Local lValid := .F. as logical
+
+    If ValType(xValue) == "C" .And. ValType(cField) == "C" .And. ;
+        ValType(aContextInfo) == "A" .And. Upper(AllTrim(cField)) == "AG_NAOCON"
+        lValid := ExistChav("SAG", xValue)
+    EndIf
+
+Return buildSAGResult(lValid, "Nao conformidade ja cadastrada ou invalida.")

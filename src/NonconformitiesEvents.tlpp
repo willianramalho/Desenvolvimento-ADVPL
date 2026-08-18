@@ -1,0 +1,21 @@
+/*/{Protheus.doc} NonconformitiesEvents
+Preserva os bloqueios de alteracao e exclusao da QIEA040.
+@type class
+@author willian.ramalho
+@since 18/08/2026
+/*/
+class NonconformitiesEvents
+    public method new() as object
+
+    @beforeUpdateInTransaction()
+    public method beforeUpdateInTransaction(oData, oModel, oError) as logical
+
+    @beforeDeleteInTransaction()
+    public method beforeDeleteInTransaction(oData, oModel, oError) as logical
+
+    private method hasReference(cAlias, cCode)                       as logical
+    private method hasReferenceInBranch(cAlias, cBranch, cCode)      as logical
+    private method hasReferenceInOtherBranch(cAlias, cBranch, cCode) as logical
+    private method validateGroup(cCode, aAliases, cMessage, oError)  as logical
+    private method validateReferences(oData, oError)                 as logical
+endclass

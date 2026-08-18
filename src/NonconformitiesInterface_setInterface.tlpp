@@ -1,0 +1,14 @@
+/*/{Protheus.doc} setInterface
+Monta a interface de Nao Conformidades via layout automatico
+(buildStandardView). QIEA040.PRW nao tem legenda, cor, acao
+customizada ou atalho proprios -- MenuDef so tem o aRotina padrao do
+FWMBrowse/MVC (Pesquisar/Visualizar/Incluir/Alterar/Excluir).
+@type method
+@author willian.ramalho Equipe Qualidade Protheus //TODO
+@since 18/07/2026
+/*/
+method setInterface() class NonconformitiesInterface
+    ::oInterface := BuildContract():new("SAG")
+    ::oInterface:setModelId("totvs.protheus.manufacturing.incominginspection.NonconformitiesModel")
+    ::oInterface:buildStandardView()
+return

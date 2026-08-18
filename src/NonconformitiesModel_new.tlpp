@@ -1,0 +1,10 @@
+/*/{Protheus.doc} new
+Metodo construtor da classe.
+@type method
+@author willian.ramalho
+@since 18/08/2026
+@return object, instancia da classe
+/*/
+method new() as object class NonconformitiesModel
+    _Super:new(,,.T.)
+return self

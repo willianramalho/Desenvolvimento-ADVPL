@@ -1,0 +1,19 @@
+/*/{Protheus.doc} setModel
+Monta o modelo de Nao Conformidades (SAG), entidade unica sem
+sub-modelos -- QIEA040.PRW so usa AddFields("SAGMASTER") obrigatorio,
+sem AddGrid. Registra NonconformitiesEvents para os bloqueios de
+alteracao/exclusao (Q040TudOk/A040ValNco).
+@type method
+@author willian.ramalho
+@since 18/08/2026
+/*/
+method setModel() class NonconformitiesModel
+    Local oEvents as object
+    Local oObject as object
+
+    oObject := ObjectFromMetadata():new("SAG")
+    ::setObject(oObject:getObject(), "SAG")
+
+    oEvents := NonconformitiesEvents():new()
+    ::setEvents(oEvents)
+return

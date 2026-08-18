@@ -1,0 +1,24 @@
+/*/{Protheus.doc} validateGroup
+Verifica um grupo de aliases equivalentes (mesmo Help legado) e registra
+o erro com a mensagem do grupo na primeira ocorrencia encontrada.
+@type method
+@author willian.ramalho
+@since 18/08/2026
+@param cCode, character, Codigo da nao conformidade (AG_NAOCON)
+@param aAliases, array, Aliases do grupo (mesmo Help legado)
+@param cMessage, character, Mensagem equivalente ao Help legado do grupo
+@param oError, object, Retorno de erro
+@return logical, Ausencia de referencia no grupo
+/*/
+method validateGroup(cCode as character, aAliases as array, cMessage as character, oError as object) as logical class NonconformitiesEvents
+
+    Local nAlias := 0 as numeric
+
+    For nAlias := 1 To Len(aAliases)
+        If self:hasReference(aAliases[nAlias], cCode)
+            oError:set(400, "Nao conformidade em uso", cMessage)
+        Return .F.
+        EndIf
+    Next nAlias
+
+return .T.

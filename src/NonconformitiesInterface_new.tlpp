@@ -1,0 +1,9 @@
+/*/{Protheus.doc} new
+Metodo construtor da classe.
+@type method
+@author willian.ramalho Equipe Qualidade Protheus //TODO
+@since 18/07/2026
+@return object, instancia da classe
+/*/
+method new() as object class NonconformitiesInterface
+return self

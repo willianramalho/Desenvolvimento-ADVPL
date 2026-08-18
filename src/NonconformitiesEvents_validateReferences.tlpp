@@ -1,0 +1,26 @@
+/*/{Protheus.doc} validateReferences
+Reproduz os 3 grupos de bloqueio de A040ValNco (Help A040DNCENS para
+QE2/QP2, A040DNCPRO para QE9/QP9, A040DNCRES para QEU/QPU), cada um com
+mensagem propria equivalente a original. Executa somente em
+alteracao/exclusao (chamado so por beforeUpdate/beforeDeleteInTransaction).
+@type method
+@author willian.ramalho
+@since 18/08/2026
+@param oData, object, Dados da operacao
+@param oError, object, Retorno de erro
+@return logical, Ausencia de referencias que bloqueiam a operacao
+/*/
+method validateReferences(oData as object, oError as object) as logical class NonconformitiesEvents
+
+    Local cCode  := oData:getFieldValue("SAG", "AG_NAOCON") as character
+    Local lValid := .T.                                     as logical
+
+    lValid := self:validateGroup(cCode, {"QE2", "QP2"}, "Existe ensaio de Inspecao de Entradas ou Processos vinculado a esta nao conformidade.", oError)
+    If lValid
+        lValid := self:validateGroup(cCode, {"QE9", "QP9"}, "Existe ensaio de produto de Inspecao de Entradas ou Processos vinculado a esta nao conformidade.", oError)
+    EndIf
+    If lValid
+        lValid := self:validateGroup(cCode, {"QEU", "QPU"}, "Existe resultado de Inspecao de Entradas ou Processos vinculado a esta nao conformidade.", oError)
+    EndIf
+
+return lValid

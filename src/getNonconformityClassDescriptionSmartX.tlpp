@@ -1,0 +1,32 @@
+/*/{Protheus.doc} getNonconformityClassDescriptionSmartX
+Reproduz a resolucao de descricao multi-idioma de A040DCla (QEE_DESCPO/
+QEE_DESCES/QEE_DESCIN conforme __LANGUAGE), sem depender das variaveis
+globais Inclui/M-> do legado -- uso exclusivo do fluxo SmartX. A040DCla
+permanece inalterada no fonte legado para outros usos (QIEA010/020/215,
+dicionario).
+@type function
+@author willian.ramalho
+@since 18/08/2026
+@param cClasse, character, Codigo da classe (QEE_CODIGO)
+@return character, Descricao da classe no idioma do ambiente
+/*/
+Function getNonconformityClassDescriptionSmartX(cClasse)
+
+    Local aArea  := QEE->(GetArea())  as array
+    Local cDesc  := ""                as character
+    Local nOrder := QEE->(IndexOrd()) as numeric
+
+    QEE->(dbSetOrder(1))
+    If QEE->(dbSeek(xFilial("QEE") + cClasse))
+        If __LANGUAGE == "SPANISH"
+            cDesc := QEE->QEE_DESCES
+        ElseIf __LANGUAGE == "ENGLISH"
+            cDesc := QEE->QEE_DESCIN
+        Else
+            cDesc := QEE->QEE_DESCPO
+        EndIf
+    EndIf
+    QEE->(dbSetOrder(nOrder))
+    RestArea(aArea)
+
+return cDesc

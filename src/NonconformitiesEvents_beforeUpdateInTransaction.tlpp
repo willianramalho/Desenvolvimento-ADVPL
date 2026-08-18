@@ -1,0 +1,12 @@
+/*/{Protheus.doc} beforeUpdateInTransaction
+Impede alterar uma nao conformidade utilizada, conforme Q040TudOk/A040ValNco.
+@type method
+@author willian.ramalho
+@since 18/08/2026
+@param oData, object, Dados da operacao
+@param oModel, object, Modelo SmartX
+@param oError, object, Retorno de erro
+@return logical, Permissao para alterar
+/*/
+method beforeUpdateInTransaction(oData as object, oModel as object, oError as object) as logical class NonconformitiesEvents
+return self:validateReferences(oData, oError)
