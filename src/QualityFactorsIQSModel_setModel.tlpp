@@ -1,0 +1,20 @@
+/*/{Protheus.doc} setModel
+Filtra QEJ por QEJ_CODTAB="2" (Fatores I.Q.S.), igual ao filtro
+q270FilFat()/uCodTab="2" do legado (QIEA270 com nOpcao=2 / QIEA271).
+@type method
+@author willian.ramalho
+@since 25/08/2026
+/*/
+method setModel() class QualityFactorsIQSModel
+    Local oEvents as object
+    Local oObject as object
+
+    oObject := ObjectFromMetadata():new("QEJ", Nil, Nil, "QEJ_CODTAB eq '2'")
+    ::setObject(oObject:getObject(), "QEJ")
+
+    // Oculta QEJ_CODTAB no browse/formulario
+    ::setProperty("QEJ_CODTAB", "hidden", .T., "QEJ")
+
+    oEvents := QualityFactorsIQSEvents():new()
+    ::setEvents(oEvents)
+return

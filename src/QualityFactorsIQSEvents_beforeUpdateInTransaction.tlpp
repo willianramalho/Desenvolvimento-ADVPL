@@ -1,0 +1,20 @@
+/*/{Protheus.doc} beforeUpdateInTransaction
+Valida duplicidade de QEJ_FATOR (Help legado JAGRAVADO) desconsiderando
+o proprio registro em alteracao -- QEJ ja esta posicionado no registro
+sendo alterado neste ponto da transacao, entao QEJ->(Recno()) identifica
+com seguranca qual linha excluir da checagem, sem depender de M-> nem
+de reconstruir a chave original (QEJ_FATOR e a propria chave em edicao).
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@param oData, object, Dados da operacao
+@param oModel, object, Modelo SmartX
+@param oError, object, Retorno de erro
+@return logical, Permissao para alterar
+/*/
+method beforeUpdateInTransaction(oData as object, oModel as object, oError as object) as logical class QualityFactorsIQSEvents
+    Local nCurRecno := QEJ->(Recno()) as numeric
+    If !self:validateFactorDuplicate(oData, oError, nCurRecno)
+        Return .F.
+    EndIf
+return self:validateUpperValueDuplicate(oData, oError, nCurRecno)

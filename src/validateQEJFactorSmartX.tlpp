@@ -1,0 +1,41 @@
+/*/{Protheus.doc} validateQEJFactorSmartX
+Valida somente formato (numerico e positivo) do fator, conforme
+QA_VerNum/Positivo em A270VlFa. A checagem de duplicidade (Help
+legado JAGRAVADO) foi movida para os eventos de QualityFactorsIAEvents/
+QualityFactorsIQSEvents (beforeCreateInTransaction/beforeUpdateInTransaction),
+pois exige desconsiderar o proprio registro na alteracao (QEJ_FATOR e a
+propria chave do registro) -- um serverValidate de campo isolado nao tem
+acesso confiavel ao recno do registro em edicao para essa exclusao.
+@type function
+@author willian.ramalho
+@since 25/08/2026
+@param xValue, variant, Valor
+@param cField, character, Campo
+@param aCtxInfo, array, Codigo da tabela
+@return json, Resultado
+/*/
+Function validateQEJFactorSmartX(xValue, cField, aCtxInfo)
+
+    Local cValue := ""  as character
+    Local lValid := .F. as logical
+
+    If ValType(cField) == "C" .And. ValType(aCtxInfo) == "A" .And. Upper(AllTrim(cField)) == "QEJ_FATOR"
+        If ValType(xValue) == "C"
+            cValue := xValue
+        ElseIf ValType(xValue) == "N"
+            cValue := AllTrim(Str(xValue))
+        EndIf
+        If !Empty(cValue)
+            // QA_VerNum recebe cValue por referencia e pode normalizar o
+            // separador decimal (virgula->ponto) para validar o formato,
+            // mas esse valor normalizado NAO e propagado de volta ao
+            // campo no contrato serverValidate (que so retorna
+            // {return, notValidMessage}) -- diferente do legado, onde
+            // M->QED_FATOR:=cVar atualizava o enchoice. Se o usuario
+            // digitar com virgula, o campo gravado mantem a formatacao
+            // originalmente digitada, nao a normalizada por QA_VerNum.
+            lValid := Positivo(Val(cValue)) .And. QA_VerNum(@cValue)
+        EndIf
+    EndIf
+
+Return buildQEJResult(lValid, OemToAnsi(STR0002)) // STR0002 - "Fator deve ser numerico e positivo (Help legado QA_NUMINV)."

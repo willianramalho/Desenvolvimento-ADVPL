@@ -1,0 +1,35 @@
+/*/{Protheus.doc} validateQEJUpperValueSmartX
+Valida somente a faixa do limite superior (0-100 ou 999.99), conforme
+o X3_VALID legado. A checagem de duplicidade (mesma combinacao de
+QEJ_CODTAB+QEJ_VLSUP ja cadastrada) foi movida para os eventos de
+QualityFactorsIAEvents/QualityFactorsIQSEvents
+(beforeCreateInTransaction/beforeUpdateInTransaction ->
+validateUpperValueDuplicate), pois exige desconsiderar o proprio
+registro na alteracao -- um serverValidate de campo isolado nao tem
+acesso confiavel ao recno do registro em edicao para essa exclusao
+(mesmo motivo que ja tinha tirado a checagem de duplicidade de
+QEJ_FATOR daqui, ver validateQEJFactorSmartX abaixo). ATENCAO: o
+ExistChav do Protheus retorna .T. quando a chave NAO existe na
+tabela (ver TDN) -- nao reintroduzir aqui sem desconsiderar o
+registro atual.
+@type function
+@author willian.ramalho
+@since 25/08/2026
+@param xValue, variant, Valor
+@param cField, character, Campo
+@param aCtxInfo, array, Codigo da tabela
+@return json, Resultado
+/*/
+Function validateQEJUpperValueSmartX(xValue, cField, aCtxInfo)
+
+    Local cTableCode := ""  as character
+    Local lValid     := .F. as logical
+
+    If ValType(xValue) == "N" .And. ValType(cField) == "C" .And. ValType(aCtxInfo) == "A" .And. Upper(AllTrim(cField)) == "QEJ_VLSUP" .And. Len(aCtxInfo) >= 1
+        cTableCode := aCtxInfo[1]
+        If ValType(cTableCode) == "C"
+            lValid := (xValue >= 0.00 .And. xValue <= 100.00) .Or. xValue == 999.99
+        EndIf
+    EndIf
+
+Return buildQEJResult(lValid, OemToAnsi(STR0001)) // STR0001 - "Limite superior invalido."

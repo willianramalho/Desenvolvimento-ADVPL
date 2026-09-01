@@ -1,0 +1,21 @@
+/*/{Protheus.doc} buildQEJResult
+Monta o JSON de retorno padrao do contrato serverValidate do Smart X.
+@type function
+@author willian.ramalho
+@since 25/08/2026
+@param lValid, logical, Resultado da validacao
+@param cMessage, character, Mensagem de falha (ignorada se lValid)
+@return json, Contrato {return, notValidMessage}
+/*/
+Static Function buildQEJResult(lValid, cMessage)
+
+    Local jResult as json
+
+    If lValid
+        cMessage := ""
+    EndIf
+    jResult := JsonObject():new()
+    jResult["return"] := lValid
+    jResult["notValidMessage"] := cMessage
+
+Return jResult

@@ -1,0 +1,14 @@
+/*/{Protheus.doc} afterCreateInTransaction
+Recalcula QEJ_VLINF de todos os registros da tabela (A270CInf), apos
+inclusao confirmada.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@param oData, object, Dados da operacao
+@param oModel, object, Modelo SmartX
+@param oError, object, Retorno de erro
+@param oSuccess, object, Retorno de sucesso
+@return logical, Resultado do processamento posterior
+/*/
+method afterCreateInTransaction(oData as object, oModel as object, oError as object, oSuccess as object) as logical class QualityFactorsIQSEvents
+return self:recalcLowerBound()

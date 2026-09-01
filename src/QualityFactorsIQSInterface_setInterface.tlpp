@@ -1,0 +1,16 @@
+/*/{Protheus.doc} setInterface
+Monta a interface de Fatores I.Q.S. via layout automatico. QIEA271
+(QIEA270 com nOpcao=2) nao tem legenda, cor ou acao customizada
+propria.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+/*/
+method setInterface() class QualityFactorsIQSInterface
+    Local cModel := "totvs.protheus.manufacturing.incominginspection.QualityFactorsIQSModel" as character
+
+    ::oInterface := BuildContract():new("qualityfactorsiqs")
+    ::oInterface:setModelId(cModel, .T.)
+    ::oInterface:setTitle(STR0001) // STR0001 - "Fatores I.Q.S."
+    ::oInterface:buildStandardView()
+return

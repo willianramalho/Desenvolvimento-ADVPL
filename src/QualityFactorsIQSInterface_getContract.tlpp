@@ -1,0 +1,9 @@
+/*/{Protheus.doc} getContract
+Retorna o contrato JSON da interface.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@return json, Contrato da interface
+/*/
+method getContract() as json class QualityFactorsIQSInterface
+return ::oInterface:getContract()

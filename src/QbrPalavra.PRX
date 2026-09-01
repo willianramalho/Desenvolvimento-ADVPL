@@ -1,0 +1,26 @@
+/*/{Protheus.doc} QbrPalavra
+Corrige a quebra de linha para não quebrar uma palavra no meio
+@author Willian Ramalho
+@since 02/07/2025
+@param 01 - mMemo		, Caracter, conteudo da descrição detalhada
+@param 02 - nTamLin 	, Numerico, tamanho da linha
+@param 03 - nTamQuebra	, Numerico, tamanho da quebra de linha
+@return
+/*/
+Static Function QbrPalavra(mMemo, nTamLin, nTamQuebra)
+
+	While .T.
+		If Empty(Subs(mMemo,nTamLin,1))
+			Exit
+		EndIf
+
+		//Caso de erro de digitacao de texto sem espacos...
+		If nTamLin < 0
+			nTamLin := nTamQuebra
+			Exit
+		EndIf
+
+		nTamLin--
+	EndDo
+
+Return

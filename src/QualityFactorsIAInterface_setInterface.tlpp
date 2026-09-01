@@ -1,0 +1,15 @@
+/*/{Protheus.doc} setInterface
+Monta a interface de Fatores I.A. via layout automatico. QIEA270.PRW
+(nOpcao=1) nao tem legenda, cor ou acao customizada propria.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+/*/
+method setInterface() class QualityFactorsIAInterface
+    Local cModel := "totvs.protheus.manufacturing.incominginspection.QualityFactorsIAModel" as character
+
+    ::oInterface := BuildContract():new("qualityfactorsia")
+    ::oInterface:setModelId(cModel, .T.)
+    ::oInterface:setTitle(STR0001) // STR0001 - "Fatores I.A."
+    ::oInterface:buildStandardView()
+return

@@ -1,0 +1,13 @@
+/*/{Protheus.doc} afterDeleteInTransaction
+Recalcula QEJ_VLINF de todos os registros restantes da tabela
+(A270CInf), apos exclusao confirmada.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@param oData, object, Dados da operacao
+@param oModel, object, Modelo SmartX
+@param oError, object, Retorno de erro
+@return logical, Resultado do processamento posterior
+/*/
+method afterDeleteInTransaction(oData as object, oModel as object, oError as object) as logical class QualityFactorsIAEvents
+return self:recalcLowerBound()

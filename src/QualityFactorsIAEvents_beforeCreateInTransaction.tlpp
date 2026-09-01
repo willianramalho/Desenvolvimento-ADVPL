@@ -1,0 +1,19 @@
+/*/{Protheus.doc} beforeCreateInTransaction
+Define QEJ_CODTAB automaticamente conforme o cadastro (I.A.),
+reproduzindo A270ITab (nOpc==3: QEJ_CODTAB:='1'), sem exigir
+digitacao do usuario. Valida duplicidade de QEJ_FATOR (Help legado
+JAGRAVADO) sem desconsiderar nenhum registro, pois e' inclusao.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@param oData, object, Dados da operacao
+@param oModel, object, Modelo SmartX
+@param oError, object, Retorno de erro
+@return logical, Permissao para incluir
+/*/
+method beforeCreateInTransaction(oData as object, oModel as object, oError as object) as logical class QualityFactorsIAEvents
+    oData:setFieldValue("QEJ", "QEJ_CODTAB",, ::cCodTab)
+    If !self:validateFactorDuplicate(oData, oError, 0)
+        Return .F.
+    EndIf
+return self:validateUpperValueDuplicate(oData, oError, 0)

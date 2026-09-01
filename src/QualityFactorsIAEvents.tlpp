@@ -1,0 +1,30 @@
+/*/{Protheus.doc} QualityFactorsIAEvents
+Eventos do QualityFactorsIAModel (QEJ, QEJ_CODTAB="1").
+@type class
+@author willian.ramalho
+@since 25/08/2026
+/*/
+class QualityFactorsIAEvents
+    private data cCodTab as character
+
+    public method new() as object
+
+    @beforeCreateInTransaction()
+    public method beforeCreateInTransaction(oData, oModel, oError) as logical
+
+    @beforeUpdateInTransaction()
+    public method beforeUpdateInTransaction(oData, oModel, oError) as logical
+
+    @afterCreateInTransaction()
+    public method afterCreateInTransaction(oData, oModel, oError, oSuccess) as logical
+
+    @afterUpdateInTransaction()
+    public method afterUpdateInTransaction(oData, oModel, oError) as logical
+
+    @afterDeleteInTransaction()
+    public method afterDeleteInTransaction(oData, oModel, oError) as logical
+
+    private method validateFactorDuplicate(oData, oError, nCurRecno) as logical
+    private method validateUpperValueDuplicate(oData, oError, nCurRecno) as logical
+    private method recalcLowerBound() as logical
+endclass

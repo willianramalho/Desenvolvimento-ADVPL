@@ -1,0 +1,13 @@
+/*/{Protheus.doc} QualityFactorsIQSInterface
+Interface SmartX da tabela de Fatores I.Q.S. (QEJ, QEJ_CODTAB="2").
+@type class
+@author willian.ramalho
+@since 25/08/2026
+/*/
+@totvsFrameworkStructureInterface(description="Fatores I.Q.S.")
+class QualityFactorsIQSInterface
+    private data oInterface as object
+    public method new() as object
+    public method setInterface()
+    public method getContract() as json
+endclass

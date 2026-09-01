@@ -1,0 +1,10 @@
+/*/{Protheus.doc} new
+Metodo construtor da classe. Fixa cCodTab="1" (Fatores I.A.).
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@return object, instancia da classe
+/*/
+method new() as object class QualityFactorsIAEvents
+    ::cCodTab := "1"
+return self

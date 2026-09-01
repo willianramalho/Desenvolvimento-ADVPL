@@ -1,0 +1,36 @@
+/*/{Protheus.doc} recalcLowerBound
+Reproduz A270CInf: percorre todos os registros de QEJ com o
+QEJ_CODTAB atendido por esta instancia, recalculando QEJ_VLINF em
+sequencia (limite inferior = QEJ_VLSUP do registro anterior + 0,01).
+Cacheia xFilial("QEJ") antes do loop. Se algum registro estiver
+bloqueado por outro processo, o recalculo daquele registro e' pulado
+(sem interromper os demais) e o retorno passa a .F. para sinalizar
+recalculo parcial.
+@type method
+@author willian.ramalho
+@since 25/08/2026
+@return logical, .T. se todos os registros foram recalculados, .F. se algum ficou bloqueado
+/*/
+method recalcLowerBound() as logical class QualityFactorsIQSEvents
+
+    Local aArea     := QEJ->(GetArea()) as array
+    Local cFilQEJ   := xFilial("QEJ")   as character
+    Local nLowBound := 0                as numeric
+    Local lAllOk    := .T.              as logical
+
+    QEJ->(DbSetOrder(1)) //QEJ_FILIAL+QEJ_CODTAB+STR(QEJ_VLSUP,6,2)
+    QEJ->(DbSeek(cFilQEJ + ::cCodTab))
+    While !QEJ->(Eof()) .And. QEJ->QEJ_CODTAB == ::cCodTab .And. QEJ->QEJ_FILIAL == cFilQEJ
+        If RecLock("QEJ", .F.)
+            QEJ->QEJ_VLINF := nLowBound
+            MsUnLock()
+        Else
+            lAllOk := .F.
+        EndIf
+        nLowBound := QEJ->QEJ_VLSUP + 0.01
+        QEJ->(DbSkip())
+    EndDo
+
+    RestArea(aArea)
+
+return lAllOk
